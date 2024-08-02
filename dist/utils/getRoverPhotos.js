@@ -9,12 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAstronomyPictureOfTheDay = void 0;
-const constants_1 = require("../constants");
-const fetchAstronomyPictureOfTheDay = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield fetch(`${constants_1.APOD_URL}?api_key=${process.env.NASA_API}`)
-        .then((res) => res.json())
-        .then((data) => data)
-        .catch(() => null);
+exports.getRoverPhotos = void 0;
+const getRoverPhotos = (bot, state, type, chatId) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!state.isWaitingSolAndPage) {
+        yield bot.sendMessage(chatId, `Please, send Sol and Page numbers using & as separator 
+For example: 1000&2`);
+        state.isWaitingSolAndPage = true;
+        state.type = type;
+    }
 });
-exports.fetchAstronomyPictureOfTheDay = fetchAstronomyPictureOfTheDay;
+exports.getRoverPhotos = getRoverPhotos;

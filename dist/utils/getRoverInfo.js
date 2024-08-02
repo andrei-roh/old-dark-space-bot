@@ -9,12 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAstronomyPictureOfTheDay = void 0;
-const constants_1 = require("../constants");
-const fetchAstronomyPictureOfTheDay = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield fetch(`${constants_1.APOD_URL}?api_key=${process.env.NASA_API}`)
-        .then((res) => res.json())
-        .then((data) => data)
-        .catch(() => null);
+exports.getRoverInfo = void 0;
+const fetchRoverPhotos_1 = require("./fetchRoverPhotos");
+const setPhotoLibraryCaption_1 = require("./setPhotoLibraryCaption");
+const getRoverInfo = (bot, type, chatId) => __awaiter(void 0, void 0, void 0, function* () {
+    const photos = yield (0, fetchRoverPhotos_1.fetchRoverPhotos)(type, 1000, 1);
+    const info = photos ? photos[0].rover : null;
+    if (info) {
+        const { name, launch_date, status, max_sol, max_date, total_photos } = info;
+        yield bot.sendMessage(chatId, (0, setPhotoLibraryCaption_1.setPhotoLibraryCaption)(name, launch_date, status, max_sol, max_date, total_photos));
+    }
 });
-exports.fetchAstronomyPictureOfTheDay = fetchAstronomyPictureOfTheDay;
+exports.getRoverInfo = getRoverInfo;

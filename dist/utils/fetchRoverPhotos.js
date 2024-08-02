@@ -9,12 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAstronomyPictureOfTheDay = void 0;
+exports.fetchRoverPhotos = void 0;
 const constants_1 = require("../constants");
-const fetchAstronomyPictureOfTheDay = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield fetch(`${constants_1.APOD_URL}?api_key=${process.env.NASA_API}`)
+const getUrlByRoverType = (type) => {
+    switch (type) {
+        case "spirit" /* RoverType.Spirit */:
+            return constants_1.SPIRIT_PHOTO_URL;
+        case "opportunity" /* RoverType.Opportunity */:
+            return constants_1.OPPORTUNITY_PHOTO_URL;
+        case "curiosity" /* RoverType.Curiosity */:
+            return constants_1.CURIOSITY_PHOTO_URL;
+        case "perseverance" /* RoverType.Perseverance */:
+            return constants_1.PERSEVERANCE_PHOTO_URL;
+    }
+};
+const fetchRoverPhotos = (type, sol, page) => __awaiter(void 0, void 0, void 0, function* () {
+    const rootUrl = getUrlByRoverType(type);
+    return yield fetch(`${rootUrl}?sol=${sol}&page=${page}&api_key=${process.env.NASA_API}`)
         .then((res) => res.json())
-        .then((data) => data)
+        .then((data) => data.photos)
         .catch(() => null);
 });
-exports.fetchAstronomyPictureOfTheDay = fetchAstronomyPictureOfTheDay;
+exports.fetchRoverPhotos = fetchRoverPhotos;
